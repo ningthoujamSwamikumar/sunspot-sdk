@@ -1,0 +1,46 @@
+{
+  "name": "sunspot-sdk",
+  "version": "1.0.0",
+  "description": "Zero-knowledge proving SDK bridging Noir and Gnark via WebAssembly.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "prebuild": "node scripts/inline-wasm.js",
+    "build": "tsup && npm run copy-wasm",
+    "copy-wasm": "shx cp src/wasm_exec.js dist/",
+    "dev": "tsup --watch",
+    "clean": "shx rm -rf dist"
+  },
+  "keywords": [
+    "zkp",
+    "noir",
+    "gnark",
+    "webassembly",
+    "solana",
+    "cryptography"
+  ],
+  "author": "ningthoujamSwamikumar",
+  "license": "MIT",
+  "packageManager": "pnpm@10.26.1",
+  "peerDependencies": {
+    "@noir-lang/noir_js": "1.0.0-beta.18"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "shx": "^0.4.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
