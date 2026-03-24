@@ -86,9 +86,9 @@ func toUint8Array(b []byte) js.Value {
 }
 
 func main() {
-	// Export the function to the Global JS scope (window or global)
+	// 1. Attach to globalThis
 	js.Global().Set("generateSunspotProof", js.FuncOf(generateProofWrapper))
 
-	// Keep the Go WASM instance alive
-	select {}
+	// 2. Keep the WebAssembly instance alive FOREVER
+	<-make(chan struct{})
 }

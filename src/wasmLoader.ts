@@ -1,5 +1,5 @@
 import { wasmBase64 } from './wasmBinary';
-import { unzlibSync } from 'fflate'; // Import the tiny universal unzipper
+import { gunzipSync } from 'fflate'; // Import the tiny universal unzipper
 import './wasm_exec.js';
 
 function decodeBase64(base64: string): Uint8Array {
@@ -26,14 +26,25 @@ export async function loadWasmBinary() {
     }
 
     const go = new (globalThis as any).Go();
-    
-    // 1. Decode the Base64 string back into zipped bytes
     const zippedBytes = decodeBase64(wasmBase64);
-    
-    // 2. Unzip the bytes in memory instantly using fflate
-    const wasmBytes = unzlibSync(zippedBytes);
+    const wasmBytes = gunzipSync(zippedBytes);
 
-    // 3. Boot up the WebAssembly engine
+    // 1. Instantiate the WebAssembly module
     const result = await WebAssembly.instantiate(wasmBytes, go.importObject);
-    go.run(result);
+    
+    // 2. Safely grab the instance regardless of which API signature was used
+    const instance = 'instance' in result ? result.instance : result;
+    
+    // 3. Boot the Go runtime (Do NOT await this, or it will block forever)
+    go.run(instance).catch((err: any) => console.error("Go WASM crashed:", err));
+
+    // 4. The Race Condition Killer: Wait for Go to explicitly attach the function
+    let retries = 0;
+    while (!(globalThis as any).generateSunspotProof) {
+        await new Promise(resolve => setTimeout(resolve, 10)); // wait 10ms
+        retries++;
+        if (retries > 50) { // Timeout after 500ms
+            throw new Error("WASM Boot Timeout: Go failed to register 'generateSunspotProof'. Check main.go!");
+        }
+    }
 }

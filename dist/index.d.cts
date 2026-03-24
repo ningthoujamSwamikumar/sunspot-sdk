@@ -582,7 +582,7 @@ declare class SunspotSDK {
      * Initializes the WASM prover environment.
      * @param wasmPath Path or URL to the sunspot_bridge.wasm file
      */
-    init(wasmPath: string): Promise<void>;
+    init(): Promise<void>;
     /**
      * Generates a witness and a Groth16 proof in one shot.
      */

@@ -19,7 +19,7 @@ export class SunspotSDK {
      * Initializes the WASM prover environment.
      * @param wasmPath Path or URL to the sunspot_bridge.wasm file
      */
-    async init(wasmPath: string): Promise<void> {
+    async init(): Promise<void> {
         if (this.isReady) return;
         await loadWasmBinary();
         this.isReady = true;
