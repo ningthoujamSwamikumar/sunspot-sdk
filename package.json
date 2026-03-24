@@ -1,6 +1,6 @@
 {
   "name": "sunspot-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Zero-knowledge proving SDK bridging Noir and Gnark via WebAssembly.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -33,6 +33,10 @@
   ],
   "author": "ningthoujamSwamikumar",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ningthoujamSwamikumar/sunspot-sdk.git"
+  },
   "packageManager": "pnpm@10.26.1",
   "peerDependencies": {
     "@noir-lang/noir_js": "1.0.0-beta.18"
@@ -42,5 +46,8 @@
     "shx": "^0.4.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2"
   }
 }
